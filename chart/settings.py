@@ -20,7 +20,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
+<<<<<<< HEAD
 SECRET_KEY = 'vl%-@dwn#!^&qvffk#u&k2wn5^a(l41i(cl7!g#k78m(m^!2b!'
+=======
+SECRET_KEY = 'b#x@=a$)o2b0%e1zd#&fx7(nv&pvxn==_f_r$vr3#&$cukc@7('
+>>>>>>> b0fce8306b46c7eda805ca5a979d7befa3af691a
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -37,7 +41,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+<<<<<<< HEAD
     'temperature',
+=======
+    'temperature'
+>>>>>>> b0fce8306b46c7eda805ca5a979d7befa3af691a
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -56,8 +64,12 @@ ROOT_URLCONF = 'chart.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
+<<<<<<< HEAD
         'DIRS': [os.path.join(BASE_DIR, 'templates')]
         ,
+=======
+        'DIRS': [],
+>>>>>>> b0fce8306b46c7eda805ca5a979d7befa3af691a
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
