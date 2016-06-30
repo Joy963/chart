@@ -10,28 +10,76 @@
     <div id="main-dynamic" style="width: 100%; height: 300px"></div>
     <div id="main-collect" style="width: 100%; height: 400px"></div>
     <script type="text/javascript">
+        function range(start, count){
+            return Array.apply(0, new Array(count)).map(function(e, i){return start+i})
+        }
+        function randomData(i) {
+            var t = new Date(new Date().getTime() - 100*1000 + i*1000);
+            return {
+                name: t.toTimeString().slice(0,8),
+                value: [
+                    [t.getFullYear(), t.getMonth() + 1, t.getDay()].join('-') + ' ' +
+                    [t.getHours(), t.getMinutes(), t.getSeconds()].join(':'),
+                    Math.round(Math.random()*(125+25+1)-25)
+                ]
+            }
+        }
+        function getData(){
+            return range(0, 100).map(function(d){
+                return randomData(d);
+            })
+        }
+
+        var dynamic_data = getData();
+
+        var dynamic_option = {
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    animation: false
+                }
+            },
+            xAxis: {
+                type: 'time',
+                splitLine: {show: true}
+            },
+            yAxis: {
+                type: 'value',
+                splitLine: {show: true}
+            },
+            series: [{
+                name: '实时温度',
+                type: 'line',
+                showSymbol: false,
+                hoverAnimation: false,
+                data: dynamic_data
+            }]
+        };
+        var dynamic_chart = echarts.init(document.getElementById('main-dynamic'));
+        dynamic_chart.setOption(dynamic_option);
+
+        setInterval(function () {
+            dynamic_data.shift();
+            dynamic_data.push(randomData(100));
+            dynamic_chart.setOption({series: [{data: dynamic_data}]});
+        }, 1000);
+
+
+
+
         var base = +new Date(1968, 9, 3);
         var oneDay = 24 * 3600 * 1000;
         var date = [];
-        var data = [Math.random() * 300];
+        var collect_data = [Math.random() * 300];
 
         for (var i = 1; i < 20000; i++) {
             var now = new Date(base += oneDay);
             date.push([now.getFullYear(), now.getMonth() + 1, now.getDate()].join('-'));
-            data.push(Math.round((Math.random() - 0.5) * 20 + data[i - 1]));
+            collect_data.push(Math.round((Math.random() - 0.5) * 20 + collect_data[i - 1]));
         }
 
         var collect_option = {
-            tooltip: {
-                trigger: 'axis',
-                position: function (pt) {
-                    return [pt[0], '10%'];
-                }
-            },
-            title: {
-                left: 'center',
-                text: '大数据量折线图'
-            },
+            tooltip: {trigger: 'axis'},
             legend: {
                 top: 'bottom',
                 data:['意向']
@@ -56,15 +104,15 @@
             },
             dataZoom: [{
                 type: 'inside',
-                start: 0,
-                end: 10
+                start: 80,
+                end: 100
             }, {
                 start: 0,
                 end: 10
             }],
             series: [
                 {
-                    name:'模拟数据',
+                    name:'当前温度',
                     type:'line',
                     smooth:true,
                     symbol: 'none',
@@ -85,78 +133,13 @@
                             }])
                         }
                     },
-                    data: data
+                    data: collect_data
                 }
             ]
         };
         var collect_chart = echarts.init(document.getElementById('main-collect'));
         collect_chart.setOption(collect_option);
 
-
-        function range(start, count){
-            return Array.apply(0, new Array(count)).map(function(e, i){return start+i})
-        }
-        function randomData(i) {
-            var t = new Date(new Date().getTime() - 100*1000 + i*1000);
-            return {
-                name: t.toTimeString().slice(0,8),
-                value: [
-                    [t.getFullYear(), t.getMonth() + 1, t.getDay()].join('-') + ' ' +
-                    [t.getHours(), t.getMinutes(), t.getSeconds()].join(':'),
-                    Math.round(Math.random()*(125+25+1)-25)
-                ]
-            }
-        }
-        function getData(){
-            return range(0, 100).map(function(d){
-                return randomData(d);
-            })
-        }
-
-        var data = getData();
-
-        var dynamic_option = {
-            title: {
-                text: '动态数据 + 时间坐标轴'
-            },
-            tooltip: {
-                trigger: 'axis',
-{#                formatter: function (params) {#}
-{#                    params = params[0];#}
-{#                    return params.name + ' :::  ' + params.value[1];#}
-{#                },#}
-                axisPointer: {
-                    animation: false
-                }
-            },
-            xAxis: {
-                type: 'time',
-                splitLine: {
-                    show: true
-                }
-            },
-            yAxis: {
-                type: 'value',
-                splitLine: {
-                    show: true
-                }
-            },
-            series: [{
-                name: '模拟数据',
-                type: 'line',
-                showSymbol: false,
-                hoverAnimation: false,
-                data: data
-            }]
-        };
-        var dynamic_chart = echarts.init(document.getElementById('main-dynamic'));
-        dynamic_chart.setOption(dynamic_option);
-
-        setInterval(function () {
-            data.shift();
-            data.push(randomData(100));
-            dynamic_chart.setOption({series: [{data: data}]});
-        }, 1000);
 
     </script>
 </body>
